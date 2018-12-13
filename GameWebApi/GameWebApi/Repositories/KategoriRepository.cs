@@ -18,7 +18,7 @@ namespace GameWebApi.Repositories
 
         public IEnumerable<Kategori> getAll()
         {
-            throw new NotImplementedException();
+            return Connection.Query<Kategori>("SELECT * FROM Kategori", transaction: Transaction);
         }
 
         public Kategori getById(int id)

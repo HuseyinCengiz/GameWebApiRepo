@@ -18,7 +18,7 @@ namespace GameWebApi.Repositories
 
         public IEnumerable<Ozellik> getAll()
         {
-            throw new NotImplementedException();
+            return Connection.Query<Ozellik>("SELECT * FROM Ozellik", transaction: Transaction);
         }
 
         public Ozellik getById(int id)
