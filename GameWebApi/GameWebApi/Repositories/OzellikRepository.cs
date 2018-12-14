@@ -34,7 +34,7 @@ namespace GameWebApi.Repositories
                 parameters.Add("@id", entity.id, DbType.Int32, direction: ParameterDirection.InputOutput);
                 parameters.Add("@adi", entity.Adi);
                 parameters.Add("@degeri", entity.Degeri, DbType.Int32);
-
+                
                 Connection.Execute("AddOzellik", parameters, commandType: System.Data.CommandType.StoredProcedure, transaction: Transaction);
 
                 entity.id = parameters.Get<int>("@id");

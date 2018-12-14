@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GameWebApi.Contracts.Requests;
 using GameWebApi.Entities;
 using GameWebApi.Infrastructure;
 using Microsoft.AspNetCore.Http;
@@ -32,14 +33,34 @@ namespace GameWebApi.Controllers
             return _unitOfWork.OyunRepository.getById(id);
         }
 
-        // POST api/item
+        // POST api/oyun
         [HttpPost]
-        public IActionResult Post([FromBody] Oyun oyun)
+        public IActionResult Post([FromBody] OyunRequest oyunRequest)
         {
-            if (oyun != null)
+            int oyunId = 0;
+            if (oyunRequest.oyun != null)
             {
-                if (_unitOfWork.OyunRepository.Insert(oyun) >= 0)
+                oyunId = _unitOfWork.OyunRepository.Insert(oyunRequest.oyun);
+                if (oyunId >= 0)
                 {
+                    if (oyunRequest.resim != null)
+                    {
+                        oyunRequest.resim.oyunId = oyunId;
+                        _unitOfWork.ResimRepository.Insert(oyunRequest.resim);
+                    }
+
+                    if (oyunRequest.video != null)
+                    {
+                        oyunRequest.video.oyunId = oyunId;
+                        _unitOfWork.VideoRepository.Insert(oyunRequest.video);
+                    }
+                    if (oyunRequest.kategorilerim.Count() > 0)
+                    {
+                        foreach (int kategoriId in oyunRequest.kategorilerim)
+                        {
+                            _unitOfWork.OyunKategoriRepository.Insert(new OyunKategori { kategoriId = kategoriId, oyunId = oyunId });
+                        }
+                    }
                     try
                     {
                         _unitOfWork.Commit();
@@ -49,7 +70,7 @@ namespace GameWebApi.Controllers
 
                         return StatusCode(500);
                     }
-                    
+
                     return Ok();
                 }
             }
