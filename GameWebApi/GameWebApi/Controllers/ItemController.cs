@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GameWebApi.Contracts.Requests;
 using GameWebApi.Entities;
 using GameWebApi.Infrastructure;
 using Microsoft.AspNetCore.Http;
@@ -34,20 +35,29 @@ namespace GameWebApi.Controllers
 
         // POST api/item
         [HttpPost]
-        public IActionResult Post([FromBody] Item item)
+        public IActionResult Post([FromBody] ItemRequest entity)
         {
-            if (item != null)
+            int itemId = 0;
+            if (entity.item != null)
             {
-                if (_unitOfWork.ItemRepository.Insert(item) >= 0)
+                itemId = _unitOfWork.ItemRepository.Insert(entity.item);
+                if (itemId >= 0)
                 {
+                    if (entity.resim != null)
+                    {
+                        entity.resim.itemId = itemId;
+                        _unitOfWork.ItemResimRepository.Insert(entity.resim);
+                    }
                     try
                     {
                         _unitOfWork.Commit();
                     }
                     catch (Exception)
                     {
+
                         return StatusCode(500);
                     }
+
                     return Ok();
                 }
             }
