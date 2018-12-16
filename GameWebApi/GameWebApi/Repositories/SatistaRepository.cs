@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using GameWebApi.Contracts.Responses;
 using GameWebApi.Entities;
 using GameWebApi.Infrastructure;
 using GameWebApi.Infrastructure.Repositories;
@@ -18,8 +19,16 @@ namespace GameWebApi.Repositories
 
         public IEnumerable<Satista> getAll()
         {
-            return Connection.Query<Satista>("SELECT * FROM Satista", transaction: Transaction);
+            return Connection.Query<Satista>("Select s.id,s.itemId,s.satisFiyati,i.adi,i.aciklama,k.kullaniciAdi,ir.url From Satista s join Item i on s.itemId=i.id join ItemResim ir on ir.itemId=s.itemId join Kullanici k on  k.id=s.kullaniciId", transaction: Transaction);
         }
+
+
+        public IEnumerable<Satislar> getAlll()
+        {
+            return Connection.Query<Satislar>("Select s.id,s.itemId,s.satisFiyati,i.adi,i.aciklama,k.kullaniciAdi,ir.url From Satista s join Item i on s.itemId=i.id join ItemResim ir on ir.itemId=s.itemId join Kullanici k on  k.id=s.kullaniciId", transaction: Transaction);
+        }
+
+
 
         public Satista getById(int id)
         {
