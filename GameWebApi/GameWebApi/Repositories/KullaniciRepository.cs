@@ -88,5 +88,10 @@ namespace GameWebApi.Repositories
         {
             return Connection.Query<Kullanici>("SELECT id FROM Kullanici WHERE kullaniciAdi=@kullaniciAdi and sifre=@sifre", new { kullaniciAdi = entity.kullaniciAdi, sifre = entity.sifre }, transaction: Transaction).FirstOrDefault().id;
         }
+
+        public string getUserName(int kullaniciId)
+        {
+            return Connection.Query<string>("SELECT kullaniciAdi FROM Kullanici WHERE id=@kullaniciId", new { kullaniciId = kullaniciId }, transaction: Transaction).FirstOrDefault();
+        }
     }
 }

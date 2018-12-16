@@ -1,4 +1,6 @@
-﻿using GameWebApi.Contracts.Responses;
+﻿using GameWebApi.Contracts.Requests;
+using GameWebApi.Contracts.Responses;
+using GameWebApi.Entities;
 using GameWebApi.Infrastructure;
 using GameWebApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +25,30 @@ namespace GameWebApi.Controllers
         public ActionResult<IEnumerable<Satislar>> GetAll()
         {
             return ((SatistaRepository)_unitOfWork.SatistaRepository).getAlll().ToList();
+        }
+
+        // POST api/satista
+        [HttpPost]
+        public IActionResult Post([FromBody] Satista satista)
+        {
+            if (satista != null)
+            {
+                if (_unitOfWork.SatistaRepository.Insert(satista) >= 0)
+                {
+                    try
+                    {
+                        _unitOfWork.Commit();
+                    }
+                    catch (Exception)
+                    {
+
+                        return StatusCode(500);
+                    }
+                    return Ok();
+                }
+            }
+
+            return BadRequest();
         }
 
     }

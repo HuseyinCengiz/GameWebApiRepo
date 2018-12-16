@@ -42,8 +42,8 @@ namespace GameWebApi.Repositories
             {
                 parameters.Add("@id", entity.id, DbType.Int32);
                 parameters.Add("@satisFiyati", entity.satisFiyati, dbType: DbType.Decimal);
-                parameters.Add("@itemId", entity.satisFiyati, dbType: DbType.Int32);
-                parameters.Add("@kullaniciId", entity.satisFiyati, dbType: DbType.Int32);
+                parameters.Add("@itemId", entity.itemId, dbType: DbType.Int32);
+                parameters.Add("@kullaniciId", entity.kullaniciId, dbType: DbType.Int32);
 
                 Connection.Execute("AddSatista", parameters, commandType: System.Data.CommandType.StoredProcedure, transaction: Transaction);
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GameWebApi.Contracts.Responses;
+using GameWebApi.Entities;
 using GameWebApi.Infrastructure;
 using GameWebApi.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -27,6 +28,27 @@ namespace GameWebApi.Controllers
             return ((SatinAlinanlarRepository)_unitOfWork.SatinAlinanlarRepository).getAllItemByUserId(id).ToList();
         }
 
+        // POST api/satinalinanlar
+        [HttpPost]
+        public IActionResult Post([FromBody] SatinAlinanlar entity)
+        {
+            if (entity != null)
+            {
+                if (_unitOfWork.SatinAlinanlarRepository.Insert(entity) >= 0)
+                {
+                    try
+                    {
+                        _unitOfWork.Commit();
+                    }
+                    catch (Exception)
+                    {
 
+                        return StatusCode(500);
+                    }
+                    return Ok();
+                }
+            }
+            return BadRequest();
+        }
     }
 }

@@ -36,10 +36,17 @@ namespace GameWebApi.Controllers
                 }
 
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return -1;
             }
+        }
+
+        // GET api/kullanici/{kullaniciId}
+        [HttpGet("{kullaniciId}")]
+        public ActionResult<string> GetUserName(int kullaniciId)
+        {
+            return ((KullaniciRepository)_unitOfWork.KullaniciRepository).getUserName(kullaniciId);
         }
     }
 }
