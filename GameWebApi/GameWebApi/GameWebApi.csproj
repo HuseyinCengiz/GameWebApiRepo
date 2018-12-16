@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Contracts\Responses\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using GameWebApi.Contracts.Responses;
 using GameWebApi.Entities;
 using GameWebApi.Infrastructure;
 using GameWebApi.Infrastructure.Repositories;
@@ -76,6 +77,12 @@ namespace GameWebApi.Repositories
                 return false;
             }
             return true;
+        }
+
+        public IEnumerable<SatinAlinanResponse> getAllItemByUserId(int userId)
+        {
+            return Connection.Query<SatinAlinanResponse>(@"SELECT s.id as satinAlinanId,s.itemId,i.adi,i.aciklama,ir.url FROM SatinAlinanlar as s INNER JOIN Item as i ON s.itemId = i.id INNER JOIN ItemResim as ir ON ir.itemId = i.id INNER JOIN Oyun as o ON o.id = i.oyunId where s.userId=@userId",new {userId=userId}, transaction: Transaction);
+            
         }
     }
 }
