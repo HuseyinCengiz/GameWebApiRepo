@@ -25,5 +25,27 @@ namespace GameWebApi.Controllers
         {
             return _unitOfWork.KategoriRepository.getAll().ToList();
         }
+        [HttpPost]
+        public IActionResult Post([FromBody] Kategori kategori)
+        {
+            if (kategori != null)
+            {
+                if (_unitOfWork.KategoriRepository.Insert(kategori) >= 0)
+                {
+                    try
+                    {
+                        _unitOfWork.Commit();
+                    }
+                    catch (Exception)
+                    {
+
+                        return StatusCode(500);
+                    }
+                    return Ok();
+                }
+            }
+
+            return BadRequest();
+        }
     }
 }
